@@ -1,0 +1,39 @@
+ Ec2 Instance provisioning example
+- name: Creating AWS resources
+  hosts: localhost
+  vars:
+   aws_access_key: 
+   aws_secret_key: 
+   key_name: 
+   aws_region: 
+   vpc_id: 
+   vpc_subnet_id: 
+   ami_id: 
+   instance_type: 
+   my_local_cidr_ip: 
+   group_id: 
+  connection: local
+  gather_facts: False 
+  tasks:
+  - name: Create an EC2 instance
+    ec2:
+      aws_access_key: "{{aws_access_key}}"
+      aws_secret_key: "{{aws_secret_key}}"
+      key_name: "{{key_name}}"
+      region: "{{aws_region}}"
+      vpc_subnet_id: "{{vpc_subnet_id}}"
+      group_id: "{{group_id}}"
+      instance_type: "{{instance_type}}"
+      image: "{{ami_id}}"
+      wait: yes
+      volumes:
+        - device_name: /dev/sda1
+          volume_type: gp2
+          volume_size: 10
+          delete_on_termination: true
+      exact_count: 1
+      count_tag:
+         Name: **tag name**
+      instance_tags: 
+         Name: **tag name** 
+    register: ec2
